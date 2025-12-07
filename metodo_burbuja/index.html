@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bubble Sort - Interactive Lab | Universidad de Pamplona</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Contenedor de burbujas flotantes -->
+    <div class="bubbles-container" id="bubblesContainer"></div>
+
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <h1>Bubble Sort</h1>
+                <p>Universidad de Pamplona - Estructuras de Datos</p>
+            </div>
+        </div>
+    </header>
+
+    <nav class="nav-tabs">
+        <div class="container">
+            <button class="tab-btn active" data-tab="theory">🏠 Inicio</button>
+            <button class="tab-btn" data-tab="visualizer">🎬 Visualizador</button>
+            <button class="tab-btn" data-tab="practice">✍️ Práctica</button>
+            <button class="tab-btn" data-tab="complexity">📊 Complejidad</button>
+            <button class="tab-btn" data-tab="quiz">🎯 Quiz</button>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="container">
+            
+            <!-- ========================================
+                 INICIO
+                 ======================================== -->
+            <section id="theory" class="tab-content active">
+                <div class="theory-hero glass-card" style="margin-bottom: var(--spacing-lg); text-align: center; padding: 4rem 2rem;">
+                    <div style="font-size: 6rem; margin-bottom: var(--spacing-lg); animation: float-wobble 3s ease-in-out infinite;">🫧</div>
+                    <h2 style="font-size: 4rem; color: var(--text-primary); margin-bottom: var(--spacing-lg); font-weight: 900; text-transform: uppercase; letter-spacing: 5px; text-shadow: 0 0 30px rgba(91, 155, 213, 0.5);">
+                        BUBBLE SORT
+                    </h2>
+                    <p style="font-size: 1.6rem; color: var(--text-secondary); max-width: 850px; margin: 0 auto; line-height: 2;">
+                        Bienvenido al Laboratorio Interactivo de Bubble Sort. Explora, visualiza y practica uno de los algoritmos de ordenamiento más fundamentales en ciencias de la computación.
+                    </p>
+                    <p style="font-size: 1.3rem; color: var(--accent); max-width: 700px; margin: var(--spacing-xl) auto 0; font-style: italic;">
+                        Universidad de Pamplona - Estructuras de Datos
+                    </p>
+                </div>
+            </section>
+
+            <!-- ========================================
+                 VISUALIZADOR
+                 ======================================== -->
+            <section id="visualizer" class="tab-content">
+                <h2>Visualizador Interactivo</h2>
+                
+                <!-- ✅ SECCIÓN MOVIDA AQUÍ: Controles de Array -->
+                <div class="controls-panel">
+                    <!-- SECCIÓN: Entrada de Array Personalizado -->
+                    <div class="custom-array-section">
+                        <h3 style="color: var(--primary); margin-bottom: var(--spacing-md); font-size: 1.3rem; text-transform: uppercase; letter-spacing: 0.05em;">
+                            ✏️ Introduce tu Propio Arreglo
+                        </h3>
+                        <div class="control-group">
+                            <label for="customArrayInput">
+                                Ingresa números separados por comas (ej: 45, 23, 67, 12, 89)
+                            </label>
+                            <div style="display: flex; gap: var(--spacing-sm); align-items: flex-start; flex-wrap: wrap;">
+                                <input 
+                                    type="text" 
+                                    id="customArrayInput" 
+                                    placeholder="45, 23, 67, 12, 89, 34, 78, 56"
+                                    style="flex: 1; min-width: 300px; padding: 1rem 1.5rem; background: rgba(0, 20, 40, 0.9); border: 2px solid rgba(91, 155, 213, 0.3); border-radius: var(--radius-md); color: var(--text-primary); font-size: 1.1rem; font-family: 'Fira Code', monospace; transition: all 0.3s ease;">
+                                <button class="btn btn-primary" id="loadCustomArray" style="white-space: nowrap;">
+                                    📥 Cargar Array
+                                </button>
+                            </div>
+                            <div id="customArrayError" style="display: none; margin-top: var(--spacing-xs); padding: 0.75rem 1rem; background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.4); border-radius: var(--radius-sm); color: var(--danger); font-size: 0.95rem;"></div>
+                            <div id="customArraySuccess" style="display: none; margin-top: var(--spacing-xs); padding: 0.75rem 1rem; background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.4); border-radius: var(--radius-sm); color: var(--success); font-size: 0.95rem;"></div>
+                        </div>
+                    </div>
+
+                    <div style="margin: var(--spacing-lg) 0; border-top: 2px solid rgba(91, 155, 213, 0.2);"></div>
+
+                    <!-- SECCIÓN: Array Aleatorio -->
+                    <div class="random-array-section">
+                        <h3 style="color: var(--primary); margin-bottom: var(--spacing-md); font-size: 1.3rem; text-transform: uppercase; letter-spacing: 0.05em;">
+                            🎲 Generar Array Aleatorio
+                        </h3>
+                        <div class="control-group">
+                            <label>
+                                Tamaño del Array: <span id="arraySizeValue">10</span>
+                            </label>
+                            <input type="range" id="arraySize" min="5" max="15" value="10" step="1">
+                        </div>
+
+                        <div class="control-group">
+                            <label>Velocidad de Animación:</label>
+                            <select id="speed">
+                                <option value="1000">Muy Lenta (1s)</option>
+                                <option value="750">Lenta (0.75s)</option>
+                                <option value="500" selected>Normal (0.5s)</option>
+                                <option value="250">Rápida (0.25s)</option>
+                                <option value="100">Muy Rápida (0.1s)</option>
+                            </select>
+                        </div>
+
+                        <div class="control-buttons">
+                            <button class="btn btn-primary" id="generateArray">🔄 Generar Nuevo Array</button>
+                            <button class="btn btn-success" id="startSort">▶️ Iniciar Ordenamiento</button>
+                            <button class="btn btn-warning" id="pauseSort" disabled>⏸️ Pausar</button>
+                            <button class="btn btn-secondary" id="resetSort">↩️ Reiniciar</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ✅ ESTADÍSTICAS AHORA DEBAJO DE LOS CONTROLES -->
+                <div class="stats-panel">
+                    <div class="stat-card">
+                        <div class="stat-label">Comparaciones</div>
+                        <div class="stat-value" id="comparisons">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Intercambios</div>
+                        <div class="stat-value" id="swaps">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Pasadas</div>
+                        <div class="stat-value" id="passes">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Estado</div>
+                        <div class="stat-value" id="status" style="font-size: 2rem;">Listo</div>
+                    </div>
+                </div>
+
+                <!-- Área de visualización -->
+                <div class="visualization-area">
+                    <div class="array-bars" id="arrayBars"></div>
+                </div>
+            </section>
+
+            <!-- ========================================
+                 PRÁCTICA
+                 ======================================== -->
+            <section id="practice" class="tab-content">
+                <h2>Modo Práctica</h2>
+                
+                <div class="glass-card" style="margin-bottom: var(--spacing-lg); padding: var(--spacing-lg);">
+                    <h3 style="color: var(--primary); margin-bottom: var(--spacing-md);">
+                        Instrucciones
+                    </h3>
+                    <p style="color: var(--text-secondary); font-size: 1.2rem; line-height: 1.8;">
+                        Ordena el array manualmente haciendo clic en dos burbujas para intercambiarlas. 
+                        Intenta hacerlo con el menor número de movimientos posible. ¡El sistema te mostrará tu eficiencia!
+                    </p>
+                </div>
+
+                <div class="stats-panel">
+                    <div class="stat-card">
+                        <div class="stat-label">Tus Movimientos</div>
+                        <div class="stat-value" id="userMoves">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Movimientos Óptimos</div>
+                        <div class="stat-value" id="optimalMoves">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Eficiencia</div>
+                        <div class="stat-value" id="efficiency">-</div>
+                    </div>
+                </div>
+
+                <div class="visualization-area">
+                    <div class="array-bars" id="practiceArray" style="gap: 20px;"></div>
+                </div>
+
+                <div id="practiceResult" class="glass-card" style="display: none; margin-top: var(--spacing-lg); text-align: center; padding: var(--spacing-xl);"></div>
+
+                <div class="control-buttons" style="margin-top: var(--spacing-lg);">
+                    <button class="btn btn-primary" id="newPracticeArray">🔄 Nuevo Array</button>
+                    <button class="btn btn-warning" id="showSolution">💡 Mostrar Solución</button>
+                    <button class="btn btn-secondary" id="resetPractice">↩️ Reiniciar</button>
+                </div>
+            </section>
+
+            <!-- ========================================
+                 COMPLEJIDAD
+                 ======================================== -->
+            <section id="complexity" class="tab-content">
+                <h2>Análisis de Complejidad</h2>
+                
+                <div class="theory-grid">
+                    <div class="theory-card">
+                        <div class="card-icon">🟢</div>
+                        <h3>Mejor Caso - O(n)</h3>
+                        <p>Cuando el array ya está ordenado. Solo requiere una pasada para verificar.</p>
+                        <button class="btn btn-success" onclick="testComplexity('best')" style="margin-top: 1rem; padding: 0.75rem 1.5rem; font-size: 1rem;">
+                            Probar Mejor Caso
+                        </button>
+                        <div id="bestResult" style="margin-top: 1rem; padding: 1rem; background: rgba(16, 185, 129, 0.1); border-radius: 8px; color: var(--text-secondary);"></div>
+                    </div>
+                    
+                    <div class="theory-card">
+                        <div class="card-icon">🔴</div>
+                        <h3>Peor Caso - O(n²)</h3>
+                        <p>Cuando el array está en orden inverso. Requiere n(n-1)/2 comparaciones.</p>
+                        <button class="btn btn-danger" onclick="testComplexity('worst')" style="margin-top: 1rem; padding: 0.75rem 1.5rem; font-size: 1rem;">
+                            Probar Peor Caso
+                        </button>
+                        <div id="worstResult" style="margin-top: 1rem; padding: 1rem; background: rgba(239, 68, 68, 0.1); border-radius: 8px; color: var(--text-secondary);"></div>
+                    </div>
+                    
+                    <div class="theory-card">
+                        <div class="card-icon">🟡</div>
+                        <h3>Caso Promedio - O(n²)</h3>
+                        <p>Para arrays aleatorios. En promedio, requiere n²/2 comparaciones.</p>
+                        <button class="btn btn-warning" onclick="testComplexity('average')" style="margin-top: 1rem; padding: 0.75rem 1.5rem; font-size: 1rem;">
+                            Probar Caso Promedio
+                        </button>
+                        <div id="averageResult" style="margin-top: 1rem; padding: 1rem; background: rgba(245, 158, 11, 0.1); border-radius: 8px; color: var(--text-secondary);"></div>
+                    </div>
+                </div>
+
+
+
+                <div class="glass-card" style="margin-top: var(--spacing-lg);">
+                    <h3 style="color: var(--primary); margin-bottom: var(--spacing-md);">
+                        Comparación con Otros Algoritmos
+                    </h3>
+                    <div style="overflow-x: auto;">
+                        <table style="width: 100%; border-collapse: collapse; color: var(--text-secondary);">
+                            <thead>
+                                <tr style="background: rgba(0, 212, 255, 0.1);">
+                                    <th style="padding: 1rem; text-align: left; border: 1px solid rgba(0, 212, 255, 0.2);">Algoritmo</th>
+                                    <th style="padding: 1rem; text-align: center; border: 1px solid rgba(0, 212, 255, 0.2);">Mejor Caso</th>
+                                    <th style="padding: 1rem; text-align: center; border: 1px solid rgba(0, 212, 255, 0.2);">Caso Promedio</th>
+                                    <th style="padding: 1rem; text-align: center; border: 1px solid rgba(0, 212, 255, 0.2);">Peor Caso</th>
+                                    <th style="padding: 1rem; text-align: center; border: 1px solid rgba(0, 212, 255, 0.2);">Espacio</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td style="padding: 1rem; border: 1px solid rgba(0, 212, 255, 0.2); font-weight: 600;">Bubble Sort</td>
+                                    <td style="padding: 1rem; text-align: center; border: 1px solid rgba(0, 212, 255, 0.2);">O(n)</td>
+                                    <td style="padding: 1rem; text-align: center; border: 1px solid rgba(0, 212, 255, 0.2);">O(n²)</td>
+                                    <td style="padding: 1rem; text-align: center; border: 1px solid rgba(0, 212, 255, 0.2);">O(n²)</td>
+                                    <td style="padding: 1rem; text-align: center; border: 1px solid rgba(0, 212, 255, 0.2);">O(1)</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 1rem; border: 1px solid rgba(0, 212, 255, 0.2);">Quick Sort</td>
+                                    <td style="padding: 1rem; text-align: center; border: 1px solid rgba(0, 212, 255, 0.2);">O(n log n)</td>
+                                    <td style="padding: 1rem; text-align: center; border: 1px solid rgba(0, 212, 255, 0.2);">O(n log n)</td>
+                                    <td style="padding: 1rem; text-align: center; border: 1px solid rgba(0, 212, 255, 0.2);">O(n²)</td>
+                                    <td style="padding: 1rem; text-align: center; border: 1px solid rgba(0, 212, 255, 0.2);">O(log n)</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 1rem; border: 1px solid rgba(0, 212, 255, 0.2);">Merge Sort</td>
+                                    <td style="padding: 1rem; text-align: center; border: 1px solid rgba(0, 212, 255, 0.2);">O(n log n)</td>
+                                    <td style="padding: 1rem; text-align: center; border: 1px solid rgba(0, 212, 255, 0.2);">O(n log n)</td>
+                                    <td style="padding: 1rem; text-align: center; border: 1px solid rgba(0, 212, 255, 0.2);">O(n log n)</td>
+                                    <td style="padding: 1rem; text-align: center; border: 1px solid rgba(0, 212, 255, 0.2);">O(n)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================
+                 QUIZ
+                 ======================================== -->
+            <section id="quiz" class="tab-content">
+                <h2>Pon a Prueba tus Conocimientos</h2>
+                
+                <div class="glass-card" style="margin-bottom: var(--spacing-lg); padding: var(--spacing-lg);">
+                    <h3 style="color: var(--primary); margin-bottom: var(--spacing-md);">
+                        Quiz de Bubble Sort
+                    </h3>
+                    <p style="color: var(--text-secondary); font-size: 1.2rem;">
+                        Responde las siguientes preguntas para evaluar tu comprensión del algoritmo Bubble Sort.
+                    </p>
+                </div>
+
+                <div id="quizContainer"></div>
+
+                <div id="quizResults" class="glass-card" style="display: none; margin-top: var(--spacing-lg);"></div>
+
+                <div class="control-buttons" style="margin-top: var(--spacing-lg);">
+                    <button class="btn btn-primary" id="startQuiz">🎯 Comenzar Quiz</button>
+                    <button class="btn btn-success" id="submitQuiz" style="display: none;">✅ Enviar Respuestas</button>
+                    <button class="btn btn-secondary" id="restartQuiz" style="display: none;">🔄 Intentar de Nuevo</button>
+                </div>
+
+
+            </section>
+
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p><strong>Bubble Sort Interactive Lab</strong></p>
+            <p>Universidad de Pamplona - Estructuras de Datos</p>
+            <p>Desarrollado con 💙 para el aprendizaje interactivo</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
