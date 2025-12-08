@@ -71,47 +71,39 @@ function initializeBackground() {
 }
 
 // ========================================
-// ANIMATED BUBBLES - SOLUCIÓN: FLUJO CONSTANTE
+// ANIMATED BUBBLES
 // ========================================
 function initializeBubbles() {
     const bubblesContainer = document.getElementById('bubblesContainer');
     
-    // SOLUCIÓN: Crear solo 3-5 burbujas iniciales
     const initialBubbles = 5;
     
     for (let i = 0; i < initialBubbles; i++) {
         createBubble(bubblesContainer, i);
     }
     
-    // SOLUCIÓN: Crear nuevas burbujas a intervalos regulares constantes
-    // Esto mantiene un flujo uniforme en todo momento
     setInterval(() => {
         createBubble(bubblesContainer, Math.random() * 100);
-    }, 800); // Una nueva burbuja cada 800ms (ajusta este valor si quieres más o menos frecuencia)
+    }, 800);
 }
 
 function createBubble(container, index) {
     const bubble = document.createElement('div');
     bubble.className = 'bubble';
     
-    // Tamaño grande constante (120px)
     const size = 120;
     bubble.style.width = size + 'px';
     bubble.style.height = size + 'px';
     
-    // Posición horizontal aleatoria
     const leftPosition = Math.random() * 100;
     bubble.style.left = leftPosition + '%';
     
-    // Velocidad de flotación aleatoria (10-18 segundos)
     const duration = Math.random() * 8 + 10;
     bubble.style.animationDuration = duration + 's';
     
-    // Sin retraso para que aparezcan inmediatamente
     bubble.style.animationDelay = '0s';
     
-    // Deriva horizontal aleatoria para el movimiento
-    const driftAmount = (Math.random() - 0.5) * 200; // -100px a 100px
+    const driftAmount = (Math.random() - 0.5) * 200;
     const driftStart = driftAmount * 0.3;
     const driftMid = driftAmount * 0.7;
     const driftEnd = driftAmount;
@@ -120,13 +112,11 @@ function createBubble(container, index) {
     bubble.style.setProperty('--drift-mid', driftMid + 'px');
     bubble.style.setProperty('--drift-end', driftEnd + 'px');
     
-    // Opacidad aleatoria
-    const opacity = Math.random() * 0.4 + 0.3; // 0.3 a 0.7
+    const opacity = Math.random() * 0.4 + 0.3;
     bubble.style.setProperty('--bubble-opacity', opacity);
     
     container.appendChild(bubble);
     
-    // Eliminar la burbuja después de que termine la animación
     setTimeout(() => {
         if (bubble.parentNode) {
             bubble.remove();
@@ -145,15 +135,12 @@ function initializeTabs() {
         button.addEventListener('click', () => {
             const tabName = button.getAttribute('data-tab');
             
-            // Remove active class from all
             tabButtons.forEach(btn => btn.classList.remove('active'));
             tabContents.forEach(content => content.classList.remove('active'));
             
-            // Add active class to clicked tab
             button.classList.add('active');
             document.getElementById(tabName).classList.add('active');
 
-            // Stop any ongoing animations when switching tabs
             stopSorting();
         });
     });
@@ -163,10 +150,8 @@ function initializeTabs() {
 // VISUALIZER SECTION
 // ========================================
 function initializeVisualizer() {
-    // Generate initial array
     generateNewArray();
 
-    // Event listeners
     document.getElementById('arraySize').addEventListener('input', function(e) {
         document.getElementById('arraySizeValue').textContent = e.target.value;
     });
@@ -180,20 +165,16 @@ function initializeVisualizer() {
     document.getElementById('pauseSort').addEventListener('click', pauseSorting);
     document.getElementById('resetSort').addEventListener('click', resetSorting);
     
-    // NUEVA FUNCIONALIDAD: Event listener para cargar array personalizado
     document.getElementById('loadCustomArray').addEventListener('click', loadCustomArray);
     
-    // NUEVA FUNCIONALIDAD: Permitir cargar con Enter
     document.getElementById('customArrayInput').addEventListener('keypress', function(e) {
         if (e.key === 'Enter') {
             loadCustomArray();
         }
     });
 
-    // NUEVA FUNCIONALIDAD: Limpiar mensajes de error al escribir
     document.getElementById('customArrayInput').addEventListener('input', function() {
         hideCustomArrayMessages();
-        // Aplicar estilo de foco
         this.style.borderColor = 'rgba(91, 155, 213, 0.6)';
         this.style.boxShadow = '0 0 0 3px rgba(91, 155, 213, 0.2)';
     });
@@ -205,52 +186,43 @@ function initializeVisualizer() {
 }
 
 // ========================================
-// NUEVA FUNCIÓN: CARGAR ARRAY PERSONALIZADO
+// CARGAR ARRAY PERSONALIZADO
 // ========================================
 function loadCustomArray() {
     const input = document.getElementById('customArrayInput');
     const inputValue = input.value.trim();
     
-    // Ocultar mensajes previos
     hideCustomArrayMessages();
     
-    // Validar que no esté vacío
     if (inputValue === '') {
         showCustomArrayError('❌ Por favor, ingresa al menos un número.');
         return;
     }
     
-    // Parsear los números
     const numberStrings = inputValue.split(',').map(s => s.trim()).filter(s => s !== '');
     
-    // Validar que haya números
     if (numberStrings.length === 0) {
         showCustomArrayError('❌ No se encontraron números válidos.');
         return;
     }
     
-    // Convertir a números
     const numbers = [];
     for (let i = 0; i < numberStrings.length; i++) {
         const num = parseFloat(numberStrings[i]);
         
-        // Validar que sea un número
         if (isNaN(num)) {
             showCustomArrayError(`❌ "${numberStrings[i]}" no es un número válido.`);
             return;
         }
         
-        // Validar rango (entre 1 y 999)
         if (num < 1 || num > 999) {
             showCustomArrayError('❌ Los números deben estar entre 1 y 999.');
             return;
         }
         
-        // Convertir a entero
         numbers.push(Math.round(num));
     }
     
-    // Validar cantidad de elementos
     if (numbers.length < 3) {
         showCustomArrayError('❌ Ingresa al menos 3 números.');
         return;
@@ -261,31 +233,23 @@ function loadCustomArray() {
         return;
     }
     
-    // Todo validado correctamente, cargar el array
     currentArray = numbers;
     originalArray = [...currentArray];
     resetStats();
     displayArray(currentArray);
     
-    // Mostrar mensaje de éxito
     showCustomArraySuccess(`✅ Array cargado exitosamente: [${currentArray.join(', ')}]`);
     
-    // Limpiar el input después de 2 segundos
     setTimeout(() => {
         input.value = '';
         hideCustomArrayMessages();
     }, 3000);
 }
 
-// ========================================
-// NUEVAS FUNCIONES: MENSAJES DE ERROR Y ÉXITO
-// ========================================
 function showCustomArrayError(message) {
     const errorDiv = document.getElementById('customArrayError');
     errorDiv.textContent = message;
     errorDiv.style.display = 'block';
-    
-    // Animación de aparición
     errorDiv.style.animation = 'fadeIn 0.3s ease';
 }
 
@@ -293,8 +257,6 @@ function showCustomArraySuccess(message) {
     const successDiv = document.getElementById('customArraySuccess');
     successDiv.textContent = message;
     successDiv.style.display = 'block';
-    
-    // Animación de aparición
     successDiv.style.animation = 'fadeIn 0.3s ease';
 }
 
@@ -303,9 +265,6 @@ function hideCustomArrayMessages() {
     document.getElementById('customArraySuccess').style.display = 'none';
 }
 
-// ========================================
-// FUNCIONES EXISTENTES (sin cambios)
-// ========================================
 function generateNewArray() {
     const size = parseInt(document.getElementById('arraySize').value);
     currentArray = [];
@@ -317,8 +276,6 @@ function generateNewArray() {
     originalArray = [...currentArray];
     resetStats();
     displayArray(currentArray);
-    
-    // Limpiar mensajes de array personalizado
     hideCustomArrayMessages();
 }
 
@@ -330,18 +287,15 @@ function displayArray(array, comparingIndices = [], swappingIndices = [], sorted
     const containerWidth = container.clientWidth;
     const barCount = array.length;
     
-    // CAMBIO IMPORTANTE: Aumentar espacio entre círculos de 16px a 24px
     const totalGap = 24 * (barCount - 1);
     const availableWidth = containerWidth - totalGap;
     
-    // CAMBIO IMPORTANTE: Tamaño mínimo de círculo aumentado de 80px a 110px
     const barSize = Math.min(110, availableWidth / barCount);
     
     array.forEach((value, index) => {
         const bar = document.createElement('div');
         bar.className = 'bar';
         
-        // Las barras son círculos, así que width = height
         bar.style.width = `${barSize}px`;
         bar.style.height = `${barSize}px`;
         
@@ -350,7 +304,6 @@ function displayArray(array, comparingIndices = [], swappingIndices = [], sorted
         barValue.textContent = value;
         bar.appendChild(barValue);
         
-        // Apply states
         if (sortedIndices.includes(index)) {
             bar.classList.add('sorted');
         } else if (comparingIndices.includes(index)) {
@@ -448,16 +401,13 @@ async function bubbleSortVisualization() {
             comparisons++;
             updateStats();
             
-            // Highlight comparing elements
             displayArray(currentArray, [j, j + 1], [], sortedIndices);
             await sleep(animationSpeed);
             
             if (currentArray[j] > currentArray[j + 1]) {
-                // Swap
                 swaps++;
                 updateStats();
                 
-                // Show swapping animation
                 displayArray(currentArray, [], [j, j + 1], sortedIndices);
                 await sleep(animationSpeed);
                 
@@ -475,7 +425,6 @@ async function bubbleSortVisualization() {
         if (!swapped) break;
     }
     
-    // Mark all as sorted
     sortedIndices = Array.from({length: n}, (_, i) => i);
     displayArray(currentArray, [], [], sortedIndices);
 }
@@ -509,7 +458,6 @@ function generatePracticeArray() {
     userMoves = 0;
     selectedBar = null;
     
-    // Calculate optimal moves
     optimalMoves = calculateOptimalMoves([...practiceArray]);
     
     updatePracticeStats();
@@ -522,7 +470,6 @@ function displayPracticeArray() {
     container.innerHTML = '';
     
     const maxValue = Math.max(...practiceArray);
-    // CAMBIO IMPORTANTE: Tamaño de círculos en práctica aumentado de 80px a 100px
     const barSize = 100;
     
     practiceArray.forEach((value, index) => {
@@ -547,18 +494,14 @@ function handlePracticeBarClick(index) {
     const bars = document.querySelectorAll('.practice-bar');
     
     if (selectedBar === null) {
-        // First selection
         selectedBar = index;
         bars[index].classList.add('selected');
     } else if (selectedBar === index) {
-        // Deselect
         selectedBar = null;
         bars[index].classList.remove('selected');
     } else {
-        // Second selection - swap
         bars[selectedBar].classList.remove('selected');
         
-        // Perform swap
         [practiceArray[selectedBar], practiceArray[index]] = 
             [practiceArray[index], practiceArray[selectedBar]];
         
@@ -634,7 +577,6 @@ function checkPracticeSolution() {
             </p>
         `;
         
-        // Mark all bars as correct
         document.querySelectorAll('.practice-bar').forEach(bar => {
             bar.classList.add('correct');
         });
@@ -672,63 +614,79 @@ function hidePracticeResult() {
 }
 
 // ========================================
-// COMPLEXITY SECTION - CORRECCIÓN PRINCIPAL
+// COMPLEXITY SECTION - CORRECCIÓN DE CÁLCULOS
 // ========================================
 function initializeComplexity() {
     drawComplexityChart();
 }
 
-// FUNCIÓN CORREGIDA: testComplexity con arrays más grandes y mejor formato de tiempo
+// CORREGIDO: Arrays más pequeños para mostrar números reales
 function testComplexity(caseType) {
     let testArray = [];
     let resultId = '';
+    let n = 10; // Tamaño del array para pruebas
     
-    // CORRECCIÓN: Usar arrays de 100 elementos para obtener tiempos medibles
     switch(caseType) {
         case 'best':
-            // Mejor caso: array ya ordenado de 100 elementos
-            testArray = Array.from({length: 100}, (_, i) => i + 1);
+            // Mejor caso: array ya ordenado
+            testArray = Array.from({length: n}, (_, i) => i + 1);
             resultId = 'bestResult';
             break;
         case 'worst':
-            // Peor caso: array en orden inverso de 100 elementos
-            testArray = Array.from({length: 100}, (_, i) => 100 - i);
+            // Peor caso: array en orden inverso
+            testArray = Array.from({length: n}, (_, i) => n - i);
             resultId = 'worstResult';
             break;
         case 'average':
-            // Caso promedio: array aleatorio de 100 elementos
-            testArray = Array.from({length: 100}, () => Math.floor(Math.random() * 100) + 1);
+            // Caso promedio: array aleatorio
+            testArray = Array.from({length: n}, () => Math.floor(Math.random() * 100) + 1);
             resultId = 'averageResult';
             break;
     }
     
-    // Ejecutar el test de ordenamiento y medir tiempo
-    const startTime = performance.now();
     const result = bubbleSortTest(testArray);
-    const endTime = performance.now();
-    const timeTaken = endTime - startTime;
     
-    // CORRECCIÓN: Formatear el tiempo correctamente
-    let timeDisplay = '';
-    if (timeTaken < 1) {
-        // Si es menor a 1ms, mostrar en microsegundos
-        timeDisplay = (timeTaken * 1000).toFixed(2) + ' μs';
-    } else if (timeTaken < 1000) {
-        // Si es menor a 1 segundo, mostrar en milisegundos
-        timeDisplay = timeTaken.toFixed(4) + ' ms';
+    // EXPLICACIÓN MEJORADA con fórmulas
+    const resultDiv = document.getElementById(resultId);
+    let explanation = '';
+    
+    if (caseType === 'best') {
+        explanation = `
+            <strong>📊 Mejor Caso - Array Ordenado</strong><br>
+            <div style="margin-top: 0.5rem; padding: 0.75rem; background: rgba(16, 185, 129, 0.1); border-radius: 6px;">
+                Array de entrada: [${testArray.slice(0, 5).join(', ')}...]<br>
+                <strong>Comparaciones:</strong> ${result.comparisons}<br>
+                <strong>Intercambios:</strong> ${result.swaps}<br><br>
+                <em>Complejidad: O(n) = ${n} comparaciones</em><br>
+                Solo necesita una pasada para verificar que ya está ordenado.
+            </div>
+        `;
+    } else if (caseType === 'worst') {
+        const expectedComparisons = (n * (n - 1)) / 2;
+        explanation = `
+            <strong>📊 Peor Caso - Array Inverso</strong><br>
+            <div style="margin-top: 0.5rem; padding: 0.75rem; background: rgba(239, 68, 68, 0.1); border-radius: 6px;">
+                Array de entrada: [${testArray.slice(0, 5).join(', ')}...]<br>
+                <strong>Comparaciones:</strong> ${result.comparisons}<br>
+                <strong>Intercambios:</strong> ${result.swaps}<br><br>
+                <em>Complejidad: O(n²) = n(n-1)/2 = ${n}×${n-1}/2 = ${expectedComparisons}</em><br>
+                Necesita comparar e intercambiar en cada pasada.
+            </div>
+        `;
     } else {
-        // Si es mayor o igual a 1 segundo, mostrar en segundos
-        timeDisplay = (timeTaken / 1000).toFixed(4) + ' s';
+        explanation = `
+            <strong>📊 Caso Promedio - Array Aleatorio</strong><br>
+            <div style="margin-top: 0.5rem; padding: 0.75rem; background: rgba(245, 158, 11, 0.1); border-radius: 6px;">
+                Array de entrada: [${testArray.slice(0, 5).join(', ')}...]<br>
+                <strong>Comparaciones:</strong> ${result.comparisons}<br>
+                <strong>Intercambios:</strong> ${result.swaps}<br><br>
+                <em>Complejidad: O(n²) - varía según el desorden inicial</em><br>
+                En promedio, requiere aproximadamente n²/4 intercambios.
+            </div>
+        `;
     }
     
-    const resultDiv = document.getElementById(resultId);
-    resultDiv.innerHTML = `
-        <strong>Resultado:</strong><br>
-        Comparaciones: ${result.comparisons}<br>
-        Intercambios: ${result.swaps}<br>
-        Tiempo: ${timeDisplay}<br>
-        Array ordenado: [${result.array.slice(0, 10).join(', ')}...]
-    `;
+    resultDiv.innerHTML = explanation;
 }
 
 function bubbleSortTest(arr) {
@@ -750,7 +708,7 @@ function bubbleSortTest(arr) {
             }
         }
         
-        if (!swapped) break;
+        if (!swapped) break; // Optimización para mejor caso
     }
     
     return { array: arr, comparisons, swaps };
@@ -758,9 +716,10 @@ function bubbleSortTest(arr) {
 
 function drawComplexityChart() {
     const canvas = document.getElementById('complexityChart');
+    if (!canvas) return;
+    
     const ctx = canvas.getContext('2d');
     
-    // Set canvas size
     canvas.width = canvas.offsetWidth;
     canvas.height = 400;
     
@@ -768,7 +727,6 @@ function drawComplexityChart() {
     const height = canvas.height;
     const padding = 60;
     
-    // Clear canvas
     ctx.clearRect(0, 0, width, height);
     
     // Draw axes
@@ -847,66 +805,106 @@ function drawComplexityChart() {
 }
 
 // ========================================
-// QUIZ SECTION
+// QUIZ SECTION - 10 PREGUNTAS BASADAS EN LAS DIAPOSITIVAS
 // ========================================
 const quizQuestions = [
     {
-        question: "¿Cuál es la complejidad temporal en el peor caso del algoritmo Bubble Sort?",
-        options: ["O(n)", "O(n log n)", "O(n²)", "O(2ⁿ)"],
-        correct: 2
-    },
-    {
-        question: "¿Qué sucede en cada pasada del algoritmo Bubble Sort?",
+        question: "¿Qué es el ordenamiento según las diapositivas?",
         options: [
-            "El elemento más pequeño se mueve al inicio",
-            "El elemento más grande 'burbujea' hacia su posición final",
-            "Se divide el array en dos partes",
-            "Se ordena todo el array"
+            "Un proceso de eliminar elementos de un array",
+            "El proceso de reorganizar elementos según un criterio específico",
+            "Una forma de buscar elementos en una lista",
+            "Un método para duplicar arrays"
         ],
         correct: 1
     },
     {
-        question: "¿Cuándo puede terminar el Bubble Sort antes de completar todas las pasadas?",
+        question: "¿Cuál es la importancia del ordenamiento en Ingeniería de Sistemas?",
         options: [
-            "Nunca, siempre debe completar n-1 pasadas",
-            "Cuando encuentra el elemento más grande",
-            "Cuando no se realiza ningún intercambio en una pasada",
-            "Cuando la mitad del array está ordenada"
+            "Solo sirve para organizar archivos",
+            "Optimización de búsquedas y procesamiento eficiente de datos",
+            "No tiene ninguna importancia",
+            "Solo se usa en bases de datos"
+        ],
+        correct: 1
+    },
+    {
+        question: "¿Qué hace el algoritmo Bubble Sort en cada pasada?",
+        options: [
+            "Divide el array en dos partes",
+            "Busca el elemento más pequeño",
+            "El elemento más grande 'burbujea' hacia su posición final",
+            "Ordena todo el array de una vez"
         ],
         correct: 2
+    },
+    {
+        question: "¿Cuál es la complejidad temporal en el PEOR caso del Bubble Sort?",
+        options: [
+            "O(n)",
+            "O(n log n)",
+            "O(n²)",
+            "O(log n)"
+        ],
+        correct: 2
+    },
+    {
+        question: "¿Cuál es la complejidad temporal en el MEJOR caso del Bubble Sort?",
+        options: [
+            "O(1)",
+            "O(n)",
+            "O(n²)",
+            "O(n log n)"
+        ],
+        correct: 1
     },
     {
         question: "¿Cuál es la complejidad espacial del Bubble Sort?",
-        options: ["O(n)", "O(log n)", "O(n²)", "O(1)"],
+        options: [
+            "O(n)",
+            "O(n²)",
+            "O(log n)",
+            "O(1)"
+        ],
         correct: 3
     },
     {
-        question: "Para un array de 5 elementos ya ordenado, ¿cuántas comparaciones realiza Bubble Sort optimizado?",
-        options: ["0 comparaciones", "4 comparaciones", "10 comparaciones", "25 comparaciones"],
-        correct: 1
+        question: "¿Cuándo termina el Bubble Sort antes de completar todas las pasadas?",
+        options: [
+            "Nunca puede terminar antes",
+            "Cuando encuentra el elemento más grande",
+            "Cuando no se realiza ningún intercambio en una pasada",
+            "Cuando la mitad está ordenada"
+        ],
+        correct: 2
     },
     {
-        question: "¿Bubble Sort es un algoritmo estable?",
+        question: "¿Es el Bubble Sort un algoritmo estable?",
         options: [
             "Sí, mantiene el orden relativo de elementos iguales",
-            "No, cambia el orden de elementos iguales",
-            "Depende de la implementación",
-            "Solo es estable en el mejor caso"
+            "No, siempre cambia el orden",
+            "Solo en el peor caso",
+            "Depende del tamaño del array"
         ],
         correct: 0
     },
     {
-        question: "¿Cuántos intercambios se necesitan para ordenar [3, 1, 2]?",
-        options: ["1 intercambio", "2 intercambios", "3 intercambios", "4 intercambios"],
+        question: "Para un array de 5 elementos ya ordenado, ¿cuántas comparaciones realiza Bubble Sort optimizado?",
+        options: [
+            "0 comparaciones",
+            "4 comparaciones",
+            "10 comparaciones",
+            "25 comparaciones"
+        ],
         correct: 1
     },
     {
-        question: "¿Qué ventaja tiene Bubble Sort sobre otros algoritmos de ordenamiento?",
+        question: "¿Qué ventaja principal tiene Bubble Sort sobre algoritmos más complejos?",
         options: [
-            "Es el más rápido",
+            "Es el más rápido para cualquier caso",
             "Es simple de entender e implementar",
-            "Usa menos memoria",
-            "Todas las anteriores"
+            "Usa menos memoria que todos los demás",
+            "Siempre es O(n)"
         ],
         correct: 1
     }
@@ -916,9 +914,6 @@ function initializeQuiz() {
     document.getElementById('startQuiz').addEventListener('click', startQuiz);
     document.getElementById('submitQuiz').addEventListener('click', submitQuiz);
     document.getElementById('restartQuiz').addEventListener('click', restartQuiz);
-    
-    // Display leaderboard on load
-    displayLeaderboard();
 }
 
 function startQuiz() {
@@ -952,7 +947,7 @@ function startQuiz() {
             });
             
             optionLabel.appendChild(radio);
-            optionLabel.appendChild(document.createTextNode(option));
+            optionLabel.appendChild(document.createTextNode(' ' + option));
             optionsDiv.appendChild(optionLabel);
         });
         
@@ -962,7 +957,7 @@ function startQuiz() {
     
     document.getElementById('startQuiz').style.display = 'none';
     document.getElementById('submitQuiz').style.display = 'inline-block';
-    document.getElementById('quizResults').classList.remove('show');
+    document.getElementById('quizResults').style.display = 'none';
 }
 
 function submitQuiz() {
@@ -992,7 +987,7 @@ function submitQuiz() {
     const percentage = ((correctCount / quizQuestions.length) * 100).toFixed(1);
     
     const resultsDiv = document.getElementById('quizResults');
-    resultsDiv.classList.add('show');
+    resultsDiv.style.display = 'block';
     
     let feedback = '';
     let emoji = '';
@@ -1012,16 +1007,16 @@ function submitQuiz() {
     }
     
     resultsDiv.innerHTML = `
-        <div style="font-size: 5rem;">${emoji}</div>
-        <h3>${feedback}</h3>
-        <div class="quiz-score">${correctCount}/${quizQuestions.length}</div>
-        <p style="font-size: 1.5rem; color: var(--primary);">${percentage}%</p>
+        <div style="font-size: 5rem; margin-bottom: 1rem;">${emoji}</div>
+        <h3 style="color: var(--primary); margin-bottom: 1rem; font-size: 2rem;">${feedback}</h3>
+        <div style="font-size: 3rem; font-weight: 700; color: var(--accent); margin-bottom: 0.5rem;">${correctCount}/${quizQuestions.length}</div>
+        <p style="font-size: 1.5rem; color: var(--text-secondary);">Puntuación: ${percentage}%</p>
     `;
     
     document.getElementById('submitQuiz').style.display = 'none';
     document.getElementById('restartQuiz').style.display = 'inline-block';
     
-    // Save to leaderboard
+    // MANTENER: Guardar en el ranking
     saveToLeaderboard(correctCount, percentage);
 }
 
@@ -1030,9 +1025,12 @@ function restartQuiz() {
     document.getElementById('submitQuiz').style.display = 'none';
     document.getElementById('restartQuiz').style.display = 'none';
     document.getElementById('quizContainer').innerHTML = '';
-    document.getElementById('quizResults').classList.remove('show');
+    document.getElementById('quizResults').style.display = 'none';
+    quizStarted = false;
+    currentQuizAnswers = {};
 }
 
+// MANTENER: Sistema de ranking con nombres
 function saveToLeaderboard(score, percentage) {
     const name = prompt('¡Felicidades! Ingresa tu nombre para el ranking:') || 'Anónimo';
     
@@ -1042,22 +1040,25 @@ function saveToLeaderboard(score, percentage) {
         name: name,
         score: score,
         percentage: percentage,
-        date: new Date().toLocaleDateString()
+        date: new Date().toLocaleDateString('es-ES')
     });
     
     leaderboard.sort((a, b) => b.score - a.score || b.percentage - a.percentage);
-    leaderboard = leaderboard.slice(0, 10); // Keep top 10
+    leaderboard = leaderboard.slice(0, 10); // Top 10
     
     localStorage.setItem('bubbleSortLeaderboard', JSON.stringify(leaderboard));
     displayLeaderboard();
 }
 
 function displayLeaderboard() {
-    const leaderboard = JSON.parse(localStorage.getItem('bubbleSortLeaderboard') || '[]');
     const container = document.getElementById('leaderboardList');
     
+    if (!container) return;
+    
+    const leaderboard = JSON.parse(localStorage.getItem('bubbleSortLeaderboard') || '[]');
+    
     if (leaderboard.length === 0) {
-        container.innerHTML = '<p style="text-align: center; color: var(--text-secondary);">No hay registros aún. ¡Sé el primero!</p>';
+        container.innerHTML = '<p style="text-align: center; color: var(--text-secondary); padding: 2rem;">No hay registros aún. ¡Sé el primero en completar el quiz!</p>';
         return;
     }
     
@@ -1071,11 +1072,13 @@ function displayLeaderboard() {
         if (index === 0) medal = '🥇';
         else if (index === 1) medal = '🥈';
         else if (index === 2) medal = '🥉';
+        else medal = `#${index + 1}`;
         
         item.innerHTML = `
-            <span class="leaderboard-rank">${medal} ${index + 1}</span>
+            <span class="leaderboard-rank">${medal}</span>
             <span class="leaderboard-name">${entry.name}</span>
             <span class="leaderboard-score">${entry.score}/${quizQuestions.length} (${entry.percentage}%)</span>
+            <span class="leaderboard-date">${entry.date}</span>
         `;
         
         container.appendChild(item);
@@ -1083,12 +1086,10 @@ function displayLeaderboard() {
 }
 
 // ========================================
-// UTILITY FUNCTIONS
+// WINDOW RESIZE
 // ========================================
-
-// Handle window resize for chart
 window.addEventListener('resize', () => {
-    if (document.getElementById('complexity').classList.contains('active')) {
+    if (document.getElementById('complexity') && document.getElementById('complexity').classList.contains('active')) {
         drawComplexityChart();
     }
 });

@@ -56,7 +56,7 @@
             <section id="visualizer" class="tab-content">
                 <h2>Visualizador Interactivo</h2>
                 
-                <!-- ✅ SECCIÓN MOVIDA AQUÍ: Controles de Array -->
+                <!-- Controles de Array -->
                 <div class="controls-panel">
                     <!-- SECCIÓN: Entrada de Array Personalizado -->
                     <div class="custom-array-section">
@@ -116,7 +116,7 @@
                     </div>
                 </div>
 
-                <!-- ✅ ESTADÍSTICAS AHORA DEBAJO DE LOS CONTROLES -->
+                <!-- Estadísticas -->
                 <div class="stats-panel">
                     <div class="stat-card">
                         <div class="stat-label">Comparaciones</div>
@@ -200,7 +200,7 @@
                         <button class="btn btn-success" onclick="testComplexity('best')" style="margin-top: 1rem; padding: 0.75rem 1.5rem; font-size: 1rem;">
                             Probar Mejor Caso
                         </button>
-                        <div id="bestResult" style="margin-top: 1rem; padding: 1rem; background: rgba(16, 185, 129, 0.1); border-radius: 8px; color: var(--text-secondary);"></div>
+                        <div id="bestResult" style="margin-top: 1rem; padding: 1rem; background: rgba(16, 185, 129, 0.1); border-radius: 8px; color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6;"></div>
                     </div>
                     
                     <div class="theory-card">
@@ -210,7 +210,7 @@
                         <button class="btn btn-danger" onclick="testComplexity('worst')" style="margin-top: 1rem; padding: 0.75rem 1.5rem; font-size: 1rem;">
                             Probar Peor Caso
                         </button>
-                        <div id="worstResult" style="margin-top: 1rem; padding: 1rem; background: rgba(239, 68, 68, 0.1); border-radius: 8px; color: var(--text-secondary);"></div>
+                        <div id="worstResult" style="margin-top: 1rem; padding: 1rem; background: rgba(239, 68, 68, 0.1); border-radius: 8px; color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6;"></div>
                     </div>
                     
                     <div class="theory-card">
@@ -220,11 +220,9 @@
                         <button class="btn btn-warning" onclick="testComplexity('average')" style="margin-top: 1rem; padding: 0.75rem 1.5rem; font-size: 1rem;">
                             Probar Caso Promedio
                         </button>
-                        <div id="averageResult" style="margin-top: 1rem; padding: 1rem; background: rgba(245, 158, 11, 0.1); border-radius: 8px; color: var(--text-secondary);"></div>
+                        <div id="averageResult" style="margin-top: 1rem; padding: 1rem; background: rgba(245, 158, 11, 0.1); border-radius: 8px; color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6;"></div>
                     </div>
                 </div>
-
-
 
                 <div class="glass-card" style="margin-top: var(--spacing-lg);">
                     <h3 style="color: var(--primary); margin-bottom: var(--spacing-md);">
@@ -270,17 +268,18 @@
             </section>
 
             <!-- ========================================
-                 QUIZ
+                 QUIZ - 10 PREGUNTAS
                  ======================================== -->
             <section id="quiz" class="tab-content">
                 <h2>Pon a Prueba tus Conocimientos</h2>
                 
                 <div class="glass-card" style="margin-bottom: var(--spacing-lg); padding: var(--spacing-lg);">
                     <h3 style="color: var(--primary); margin-bottom: var(--spacing-md);">
-                        Quiz de Bubble Sort
+                        Quiz de Bubble Sort - 10 Preguntas
                     </h3>
-                    <p style="color: var(--text-secondary); font-size: 1.2rem;">
-                        Responde las siguientes preguntas para evaluar tu comprensión del algoritmo Bubble Sort.
+                    <p style="color: var(--text-secondary); font-size: 1.2rem; line-height: 1.8;">
+                        Responde las siguientes 10 preguntas para evaluar tu comprensión del algoritmo Bubble Sort.
+                        Las preguntas están basadas en el contenido de las diapositivas presentadas.
                     </p>
                 </div>
 
@@ -294,6 +293,16 @@
                     <button class="btn btn-secondary" id="restartQuiz" style="display: none;">🔄 Intentar de Nuevo</button>
                 </div>
 
+                <!-- ⭐ NUEVA SECCIÓN: RANKING / LEADERBOARD -->
+                <div class="glass-card" style="margin-top: var(--spacing-xl); padding: var(--spacing-lg);">
+                    <h3 style="color: var(--primary); margin-bottom: var(--spacing-md); font-size: 1.8rem; text-align: center;">
+                        🏆 Tabla de Ranking - Top 10
+                    </h3>
+                    <p style="color: var(--text-secondary); font-size: 1.1rem; text-align: center; margin-bottom: var(--spacing-lg);">
+                        Los mejores puntajes obtenidos en el quiz
+                    </p>
+                    <div id="leaderboardList" class="leaderboard-container"></div>
+                </div>
 
             </section>
 
